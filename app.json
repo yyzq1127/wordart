@@ -2,9 +2,13 @@
   "pages": [
     "pages/index/index"
   ],
+
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F5F5F5",
+    "navigationBarTitleText": "艺术字生成器"
   },
   "style": "v2",
   "renderer": "skyline",

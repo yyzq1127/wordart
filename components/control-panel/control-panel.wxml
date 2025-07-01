@@ -1,0 +1,23 @@
+<!--components/control-panel/control-panel.wxml-->
+<view class="control-panel-wrapper">
+  <!-- 标签页 -->
+  <scroll-view class="tabs-container" scroll-x scroll-with-animation>
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="index" 
+      class="tab-item {{currentTab === index ? 'active' : ''}}" 
+      data-index="{{index}}"
+      bindtap="switchTab"
+    >
+      {{item.name}}
+    </view>
+  </scroll-view>
+
+  <!-- 内容区域 -->
+  <view class="tab-content">
+    <view wx:if="{{currentTab === 0}}">文本内容设置</view>
+    <view wx:if="{{currentTab === 1}}">字体样式设置</view>
+    <view wx:if="{{currentTab === 2}}">颜色选项</view>
+    <view wx:if="{{currentTab === 3}}">效果调整</view>
+  </view>
+</view>

@@ -1,0 +1,4 @@
+<!--components/preview-canvas/preview-canvas.wxml-->
+<view class="canvas-wrapper">
+  <text class="placeholder-text">艺术字预览区</text>
+</view>

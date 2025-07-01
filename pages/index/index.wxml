@@ -1,7 +1,25 @@
 <!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    Weixin
+<!--pages/index/index.wxml-->
+<!-- 当字体加载成功后，为容器添加 'font-loaded' 类 -->
+<view class="waterfall-container {{fontLoaded ? 'font-loaded' : ''}}">
+  <!-- 左侧列 -->
+  <view class="column">
+    <view 
+      wx:for="{{leftColumnData}}" 
+      wx:key="index" 
+      class="waterfall-item"
+    >
+      {{item.text}}
+    </view>
   </view>
-</scroll-view>
+  <!-- 右侧列 -->
+  <view class="column">
+    <view 
+      wx:for="{{rightColumnData}}" 
+      wx:key="index" 
+      class="waterfall-item"
+    >
+      {{item.text}}
+    </view>
+  </view>
+</view>
