@@ -29,6 +29,11 @@ Page({
       },
       fail: (err) => {
         console.error('字体加载失败，请检查文件路径、名称和大小。', err);
+        wx.showToast({
+          title: '字体加载失败，请检查网络',
+          icon: 'none', // 不显示图标
+          duration: 2000 // 提示持续2秒
+        });
       }
     });
   },
