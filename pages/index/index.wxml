@@ -1,15 +1,16 @@
 <!--index.wxml-->
 <!--pages/index/index.wxml-->
-<!-- 当字体加载成功后，为容器添加 'font-loaded' 类 -->
-<view class="waterfall-container {{fontLoaded ? 'font-loaded' : ''}}">
+<view class="waterfall-container">
   <!-- 左侧列 -->
   <view class="column">
     <view 
       wx:for="{{leftColumnData}}" 
       wx:key="index" 
       class="waterfall-item"
+      style="font-family: {{item.fontFamily}}, sans-serif;"
     >
-      {{item.text}}
+      <view class="text-preview">{{item.text}}</view>
+      <view class="font-name">{{item.fontName}}</view>
     </view>
   </view>
   <!-- 右侧列 -->
@@ -18,8 +19,10 @@
       wx:for="{{rightColumnData}}" 
       wx:key="index" 
       class="waterfall-item"
+      style="font-family: {{item.fontFamily}}, sans-serif;"
     >
-      {{item.text}}
+      <view class="text-preview">{{item.text}}</view>
+      <view class="font-name">{{item.fontName}}</view>
     </view>
   </view>
 </view>

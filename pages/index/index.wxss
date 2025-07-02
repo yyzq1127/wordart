@@ -25,14 +25,24 @@ page {
   padding: 20rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
   display: flex;
+  flex-direction: column; /* 改为纵向排列 */
   justify-content: center;
   align-items: center;
-  font-size: 40rpx;
   color: #333;
-  transition: font-family 0.3s;
+  transition: all 0.3s; /* 过渡效果 */
 }
 
-/* 只有当.font-loaded类存在时，才应用自定义字体 */
-.font-loaded .waterfall-item {
-  font-family: 'PFYTT', sans-serif;
+.text-preview {
+  font-size: 50rpx; /* 预览文字稍大 */
+  flex-grow: 1; /* 占据大部分空间 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.font-name {
+  font-size: 24rpx; /* 字体名称稍小 */
+  color: #888;
+  margin-top: 10rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif; /* 字体名称使用系统默认字体 */
 }
