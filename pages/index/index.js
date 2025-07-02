@@ -9,7 +9,7 @@ const fonts = [
   {
     "name": "Aa厚底黑",
     "fontFamily": "AaHouDiHei",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/testfont.ttf"
+    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/Aa%E5%8E%9A%E5%BA%95%E9%BB%91.ttf"
   },
   {
     "name": "Leefont蒙黑体",
@@ -60,44 +60,40 @@ Page({
     this.loadAllFonts();
   },
 
-  // 串行加载字体，一次加载一个，避免并发问题
-  loadAllFonts() {
+  // 纯串行加载，保证在部分真机环境下的稳定性
+  async loadAllFonts() {
     wx.showLoading({ title: '字体加载中...' });
-    this.loadFontSequentially(0); // 从第一个字体开始加载
-  },
 
-  loadFontSequentially(index) {
-    // 如果所有字体都已处理完毕，则隐藏loading
-    if (index >= fonts.length) {
-      wx.hideLoading();
-      if (this.data.loadedFonts.length > 0 && this.data.loadedFonts.length === fonts.length) {
-        wx.showToast({ title: '全部加载完成!', icon: 'success', duration: 1500 });
-      }
-      return;
+    for (const font of fonts) {
+      await new Promise((resolve) => {
+        wx.loadFontFace({
+          family: font.fontFamily,
+          source: `url("${font.url}")`,
+          success: () => {
+            console.log(`字体 ${font.name} 加载成功`);
+            const newLoadedFonts = this.data.loadedFonts.concat(font);
+            this.setData({
+              loadedFonts: newLoadedFonts
+            }, () => {
+              // 每加载成功一个就刷新一次瀑布流
+              this.generateWaterfallData();
+              resolve(true);
+            });
+          },
+          fail: (err) => {
+            wx.showToast({ title: `字体 ${font.name} 加载失败`, icon: 'none' });
+            console.error(`字体 ${font.name} 加载失败`, err);
+            resolve(false); // 失败也 resolve，继续加载下一个
+          }
+        });
+      });
     }
 
-    const font = fonts[index];
-    wx.loadFontFace({
-      family: font.fontFamily,
-      source: `url("${font.url}")`,
-      success: () => {
-        console.log(`字体 ${font.name} 加载成功`);
-        const newLoadedFonts = this.data.loadedFonts.concat(font);
-        this.setData({
-          loadedFonts: newLoadedFonts
-        }, () => {
-          this.generateWaterfallData();
-          // 成功后，继续加载下一个
-          this.loadFontSequentially(index + 1);
-        });
-      },
-      fail: (err) => {
-        wx.showToast({ title: `字体 ${font.name} 加载失败`, icon: 'none' });
-        console.error(`字体 ${font.name} 加载失败`, err);
-        // 失败后，同样继续加载下一个
-        this.loadFontSequentially(index + 1);
-      }
-    });
+    wx.hideLoading();
+    if (this.data.loadedFonts.length > 0) {
+      const toastTitle = this.data.loadedFonts.length === fonts.length ? '全部加载完成!' : '部分字体加载完成';
+      wx.showToast({ title: toastTitle, icon: 'success', duration: 1500 });
+    }
   },
 
   // 根据加载成功的字体生成瀑布流数据
