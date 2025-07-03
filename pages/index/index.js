@@ -1,50 +1,57 @@
 // index.js
-// 将字体数据直接定义为常量数组
+const fontBase64Data = require('../../data/font_base64_data.js');
+
+// 字体数据现在只包含核心信息
 const fonts = [
   {
     "name": "Aa剑豪体",
     "fontFamily": "AaJianHaoTi",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/Aa%E5%89%91%E8%B1%AA%E4%BD%93.ttf"
+
   },
   {
     "name": "Aa厚底黑",
     "fontFamily": "AaHouDiHei",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/Aa%E5%8E%9A%E5%BA%95%E9%BB%91.ttf"
+
   },
   {
     "name": "Leefont蒙黑体",
     "fontFamily": "LeefontMengHeiTi",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/Leefont%E8%92%99%E9%BB%91%E4%BD%93.ttf"
+
   },
   {
     "name": "中文像素字体",
-    "fontFamily": "ZhongWenXiangSu",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E4%B8%AD%E6%96%87%E5%83%8F%E7%B4%A0%E5%AD%97%E4%BD%93.ttf"
+    "fontFamily": "ZhongWenXiangSuZiTi", // 修正 fontFamily
+
   },
   {
     "name": "今年也要加油鸭",
-    "fontFamily": "JianNianJiaYouYa",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E4%BB%8A%E5%B9%B4%E4%B9%9F%E8%A6%81%E5%8A%A0%E6%B2%B9%E9%B8%AD.ttf"
+    "fontFamily": "JinNianYeYaoJiaYouYa", // 修正 fontFamily
+
   },
   {
     "name": "平方雨桐体",
     "fontFamily": "PingFangYuTongTi",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E5%B9%B3%E6%96%B9%E9%9B%A8%E6%A1%90%E4%BD%93.ttf"
+
   },
   {
     "name": "江西拙楷2.0",
     "fontFamily": "JiangXiZhuoKai",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E6%B1%9F%E8%A5%BF%E6%8B%99%E6%A5%B72.0.ttf"
+
   },
   {
     "name": "美呗嘿嘿体",
     "fontFamily": "MeiBeiHeiHeiTi",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E7%BE%8E%E5%91%97%E5%98%BF%E5%98%BF%E4%BD%93.ttf"
+
   },
   {
     "name": "花园宋体",
     "fontFamily": "HuaYuanSongTi",
-    "url": "https://wordart-1301541469.cos.ap-guangzhou.myqcloud.com/%E6%B5%8B%E8%AF%951/%E8%8A%B1%E5%9B%AD%E5%AE%8B%E4%BD%93.ttf"
+
+  },
+  {
+    "name": "香萃刻宋", // 补全字体
+    "fontFamily": "XiangCuiKeSong",
+
   }
 ];
 
@@ -53,7 +60,6 @@ Page({
     leftColumnData: [],
     rightColumnData: [],
     loadedFonts: [], // 存储已成功加载的字体信息
-
   },
 
   onLoad() {
@@ -68,7 +74,7 @@ Page({
       await new Promise((resolve) => {
         wx.loadFontFace({
           family: font.fontFamily,
-          source: `url("${font.url}")`,
+          source: `data:font/truetype;base64,${fontBase64Data[font.fontFamily]}`,
           success: () => {
             console.log(`字体 ${font.name} 加载成功`);
             const newLoadedFonts = this.data.loadedFonts.concat(font);
@@ -81,8 +87,9 @@ Page({
             });
           },
           fail: (err) => {
+            const errorMsg = `字体 ${font.name} 加载失败, 错误: ${JSON.stringify(err)}`;
+            console.error(errorMsg);
             wx.showToast({ title: `字体 ${font.name} 加载失败`, icon: 'none' });
-            console.error(`字体 ${font.name} 加载失败`, err);
             resolve(false); // 失败也 resolve，继续加载下一个
           }
         });
@@ -105,7 +112,6 @@ Page({
     if (loadedFonts.length === 0) {
       // 如果没有字体加载成功，清空界面并可选择性提示
       this.setData({ leftColumnData: [], rightColumnData: [] });
-      // wx.showToast({ title: '暂无可用字体', icon: 'none' });
       return;
     }
 

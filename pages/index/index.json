@@ -1,4 +1,5 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "艺术字预览"
+  "navigationBarTitleText": "艺术字预览",
+  "navigationStyle": "custom"
 }
